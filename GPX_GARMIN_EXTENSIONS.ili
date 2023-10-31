@@ -1,0 +1,45 @@
+INTERLIS 2.3;
+
+!!@ technicalContact=mailto:webrian
+MODEL GPX_GARMIN_EXTENSIONS (de)
+AT "mailto:webrian"
+VERSION "2023-10-31"  =
+  IMPORTS Units;
+
+  TOPIC GPX =
+
+    CLASS TRACK =
+      /** Ein Freitextfeld zum Speichern des Dateinamen ohne Endung
+       */
+      !!@ ili2db.dispName=Dateiname
+      cmt : TEXT*50;
+    END TRACK;
+
+    CLASS TRACKPOINT =
+      point : MANDATORY COORD -180.00000 .. 180.00000 [Units.Angle_Degree], -90.00000 .. 90.00000 [Units.Angle_Degree], 0.000 .. 10000.000 [INTERLIS.m];
+      !!@ ili2db.dispName=Zeitstempel
+      time : MANDATORY FORMAT INTERLIS.XMLDateTime "1970-01-01T00:00:00.000" .. "2999-12-31T00:00:00.000";
+      !!@ ili2db.dispName=Temperatur
+      atemp : -50 .. 50 [Units.t];
+      !!@ ili2db.dispName=Trittfrequenz
+      cad : 0 .. 300;
+      !!@ ili2db.dispName=Herzfrequenz
+      hr : 0 .. 250;
+    END TRACKPOINT;
+
+    CLASS TRACKSEGMENT =
+    END TRACKSEGMENT;
+
+    ASSOCIATION Trackpoint_Tracksegment =
+      TRACKPOINT -- {1..*} TRACKPOINT;
+      TRACKSEGMENT -<#> {1} TRACKSEGMENT;
+    END Trackpoint_Tracksegment;
+
+    ASSOCIATION Tracksegment_Track =
+      TRACKSEGMENT -- {1..*} TRACKSEGMENT;
+      TRACK -<#> {1} TRACK;
+    END Tracksegment_Track;
+
+  END GPX;
+
+END GPX_GARMIN_EXTENSIONS.
