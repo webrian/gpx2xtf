@@ -95,9 +95,12 @@
             <cad>
                 <xsl:value-of select="gpx:extensions/gpxtpx:TrackPointExtension/gpxtpx:cad"/>
             </cad>
-            <hr>
-                <xsl:value-of select="gpx:extensions/gpxtpx:TrackPointExtension/gpxtpx:hr"/>
-            </hr>
+            <!-- Transform heartrate only if below 250 (see also INTERLIS model) -->
+            <xsl:if test="gpx:extensions/gpxtpx:TrackPointExtension/gpxtpx:hr &lt; 250">
+                <hr>
+                    <xsl:value-of select="gpx:extensions/gpxtpx:TrackPointExtension/gpxtpx:hr"/>
+                </hr>
+            </xsl:if>
             <xsl:element name="TRACKSEGMENT">
                 <xsl:attribute name="REF">
                     <xsl:value-of select="$TRACKSEG_TID"/>
